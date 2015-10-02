@@ -1,18 +1,4 @@
-/*
- * Copyright (C) 2014 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+
 
 package com.example.hfy;
 
@@ -44,7 +30,7 @@ public class CalculatorEditText extends EditText {
 
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            // Prevents the selection action mode on double tap.
+            // Prevents the selection action mode on double tap.防止双抽头选择动作模式。
             return false;
         }
 
@@ -62,7 +48,7 @@ public class CalculatorEditText extends EditText {
     private final float mMinimumTextSize;
     private final float mStepTextSize;
 
-    // Temporary objects for use in layout methods.
+    // Temporary objects for use in layout methods.布局方法中使用的临时对象。
     private final Paint mTempPaint = new TextPaint();
     private final Rect mTempRect = new Rect();
 
@@ -102,7 +88,7 @@ public class CalculatorEditText extends EditText {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getActionMasked() == MotionEvent.ACTION_UP) {
-            // Hack to prevent keyboard and insertion handle from showing.
+            // Hack to prevent keyboard and insertion handle from showing.破解以防止键盘和插入手柄显示。
             cancelLongPress();
         }
         return super.onTouchEvent(event);
@@ -123,6 +109,8 @@ public class CalculatorEditText extends EditText {
 
         // EditText will freeze any text with a selection regardless of getFreezesText() ->
         // return null to prevent any state from being preserved at the instance level.
+        // 编辑将冻结任何文本与选择无论getFreezesText() ->
+        // 为防止任何状态被保存在实例级而返回空。
         return null;
     }
 
@@ -132,7 +120,7 @@ public class CalculatorEditText extends EditText {
 
         final int textLength = text.length();
         if (getSelectionStart() != textLength || getSelectionEnd() != textLength) {
-            // Pin the selection to the end of the current text.
+            // Pin the selection to the end of the current text.将选择引脚到当前文本的结尾。
             setSelection(textLength);
         }
         setTextSize(TypedValue.COMPLEX_UNIT_PX, getVariableTextSize(text.toString()));
@@ -154,14 +142,14 @@ public class CalculatorEditText extends EditText {
 
     public float getVariableTextSize(String text) {
         if (mWidthConstraint < 0 || mMaximumTextSize <= mMinimumTextSize) {
-            // Not measured, bail early.
+            // Not measured, bail early.不测，早保释。
             return getTextSize();
         }
 
-        // Capture current paint state.
+        // Capture current paint state.捕捉当前状态。
         mTempPaint.set(getPaint());
 
-        // Step through increasing text sizes until the text would no longer fit.
+        // Step through increasing text sizes until the text would no longer fit.通过增加文本大小，直到文本不再适合。
         float lastFitTextSize = mMinimumTextSize;
         while (lastFitTextSize < mMaximumTextSize) {
             final float nextSize = Math.min(lastFitTextSize + mStepTextSize, mMaximumTextSize);
@@ -180,6 +168,8 @@ public class CalculatorEditText extends EditText {
     public int getCompoundPaddingTop() {
         // Measure the top padding from the capital letter height of the text instead of the top,
         // but don't remove more than the available top padding otherwise clipping may occur.
+        //用大写字母的高度来衡量顶部填充，而不是顶部，
+        //但不要删除更多的可用顶部填充，否则可能会出现裁剪。
         getPaint().getTextBounds("H", 0, 1, mTempRect);
 
         final FontMetricsInt fontMetrics = getPaint().getFontMetricsInt();
@@ -191,6 +181,8 @@ public class CalculatorEditText extends EditText {
     public int getCompoundPaddingBottom() {
         // Measure the bottom padding from the baseline of the text instead of the bottom, but don't
         // remove more than the available bottom padding otherwise clipping may occur.
+        // 测量底部填充的文本，而不是底部，但不
+        // 除可获得的底部填充物，否则可能发生剪切。
         final FontMetricsInt fontMetrics = getPaint().getFontMetricsInt();
         return super.getCompoundPaddingBottom() - Math.min(getPaddingBottom(), fontMetrics.descent);
     }

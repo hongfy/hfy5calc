@@ -1,18 +1,4 @@
-/*
- * Copyright (C) 2014 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+
 
 package com.example.hfy;
 
@@ -55,7 +41,7 @@ public class Calculator extends Activity
     private static final String KEY_CURRENT_EXPRESSION = NAME + "_currentExpression";
 
     /**
-     * Constant for an invalid resource id.
+     * Constant for an invalid resource id.一个无效的资源标识常量。
      */
     public static final int INVALID_RES_ID = -1;
 
@@ -156,7 +142,7 @@ public class Calculator extends Activity
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
-        // If there's an animation in progress, cancel it first to ensure our state is up-to-date.
+        // If there's an animation in progress, cancel it first to ensure our state is up-to-date.如果有一个动画正在进行中，先取消它，以确保我们的状态是最新的。
         if (mCurrentAnimator != null) {
             mCurrentAnimator.cancel();
         }
@@ -200,7 +186,7 @@ public class Calculator extends Activity
     public void onBackPressed() {
         if (mPadViewPager == null || mPadViewPager.getCurrentItem() == 0) {
             // If the user is currently looking at the first pad (or the pad is not paged),
-            // allow the system to handle the Back button.
+            // allow the system to handle the Back button.允许系统来处理后面的按钮。
             super.onBackPressed();
         } else {
             // Otherwise, select the previous pad.
@@ -213,6 +199,7 @@ public class Calculator extends Activity
         super.onUserInteraction();
 
         // If there's an animation in progress, cancel it so the user interaction can be handled
+        // 如果有一个动画正在进行中，取消它，这样就可以处理用户交互
         // immediately.
         if (mCurrentAnimator != null) {
             mCurrentAnimator.cancel();
@@ -237,7 +224,7 @@ public class Calculator extends Activity
             case R.id.fun_log:
             case R.id.fun_sin:
             case R.id.fun_tan:
-                // Add left parenthesis after functions.
+                // Add left parenthesis after functions.在功能加左括号。
                 mFormulaEditText.append(((Button) view).getText() + "(");
                 break;
             default:
@@ -266,7 +253,7 @@ public class Calculator extends Activity
         } else if (!TextUtils.isEmpty(result)) {
             onResult(result);
         } else if (mCurrentState == CalculatorState.EVALUATE) {
-            // The current expression cannot be evaluated -> return to the input state.
+            // The current expression cannot be evaluated -> return to the input state.当前表达式不能被评价为输入状态。
             setState(CalculatorState.INPUT);
         }
 
@@ -276,12 +263,12 @@ public class Calculator extends Activity
     @Override
     public void onTextSizeChanged(final TextView textView, float oldSize) {
         if (mCurrentState != CalculatorState.INPUT) {
-            // Only animate text changes that occur from user input.
+            // Only animate text changes that occur from user input.只有从用户输入发生的动画文本更改
             return;
         }
 
-        // Calculate the values needed to perform the scale and translation animations,
-        // maintaining the same apparent baseline for the displayed text.
+        // Calculate the values needed to perform the scale and translation animations,计算执行的规模和翻译动画所需的值，
+        // maintaining the same apparent baseline for the displayed text.保持相同的显示文本的基线。
         final float textScale = oldSize / textView.getTextSize();
         final float translationX = (1.0f - textScale) *
                 (textView.getWidth() / 2.0f - textView.getPaddingEnd());
@@ -307,7 +294,7 @@ public class Calculator extends Activity
     }
 
     private void onDelete() {
-        // Delete works like backspace; remove the last character from the expression.
+        // Delete works like backspace; remove the last character from the expression.删除的作品如退格；从表达删除最后一个字符。
         final Editable formulaText = mFormulaEditText.getEditableText();
         final int formulaLength = formulaText.length();
         if (formulaLength > 0) {
@@ -322,7 +309,7 @@ public class Calculator extends Activity
         final Rect displayRect = new Rect();
         mDisplayView.getGlobalVisibleRect(displayRect);
 
-        // Make reveal cover the display and status bar.
+        // Make reveal cover the display and status bar.使显示覆盖的显示和状态栏。
         final View revealView = new View(this);
         revealView.setBottom(displayRect.bottom);
         revealView.setLeft(displayRect.left);
@@ -401,6 +388,8 @@ public class Calculator extends Activity
     private void onResult(final String result) {
         // Calculate the values needed to perform the scale and translation animations,
         // accounting for how the scale will affect the final position of the text.
+        //计算所需的值来执行的规模和翻译动画，
+        //会计的规模将影响到最终的文本位置。
         final float resultScale =
                 mFormulaEditText.getVariableTextSize(result) / mResultEditText.getTextSize();
         final float resultTranslationX = (1.0f - resultScale) *
@@ -412,6 +401,7 @@ public class Calculator extends Activity
         final float formulaTranslationY = -mFormulaEditText.getBottom();
 
         // Use a value animator to fade to the final text color over the course of the animation.
+        //使用价值的动画师淡出的动画课程最终的文本颜色。
         final int resultTextColor = mResultEditText.getCurrentTextColor();
         final int formulaTextColor = mFormulaEditText.getCurrentTextColor();
         final ValueAnimator textColorAnimator =
@@ -441,7 +431,7 @@ public class Calculator extends Activity
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                // Reset all of the values modified during the animation.
+                // Reset all of the values modified during the animation.重置动画中修改的所有值。
                 mResultEditText.setTextColor(resultTextColor);
                 mResultEditText.setScaleX(1.0f);
                 mResultEditText.setScaleY(1.0f);
@@ -449,7 +439,7 @@ public class Calculator extends Activity
                 mResultEditText.setTranslationY(0.0f);
                 mFormulaEditText.setTranslationY(0.0f);
 
-                // Finally update the formula to use the current result.
+                // Finally update the formula to use the current result.最后更新的公式，使用当前的结果
                 mFormulaEditText.setText(result);
                 setState(CalculatorState.RESULT);
 
