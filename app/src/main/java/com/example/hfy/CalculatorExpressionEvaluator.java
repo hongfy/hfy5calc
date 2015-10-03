@@ -6,6 +6,8 @@ import org.javia.arity.Symbols;
 import org.javia.arity.SyntaxException;
 import org.javia.arity.Util;
 
+import java.math.BigDecimal;
+
 public class CalculatorExpressionEvaluator {
 
     private static final int MAX_DIGITS = 12;
@@ -41,8 +43,9 @@ public class CalculatorExpressionEvaluator {
         }
 
         try {
-            double result = mSymbols.eval(expr);
-            if (Double.isNaN(result)) {
+            Double DouResult = mSymbols.eval(expr);
+            BigDecimal result = new BigDecimal(mSymbols.eval(expr));
+            if (Double.isNaN(DouResult)) {
                 callback.onEvaluate(expr, null, R.string.error_nan);
             } else {
                 // The arity library uses floating point arithmetic when evaluating the expression
@@ -51,8 +54,10 @@ public class CalculatorExpressionEvaluator {
                 //数库使用浮点运算时，计算表达式
                 //导致精度误差的结果。方法double to string隐藏这些
                 //误差；通过对精度下降的数字计算。
+                String BigString = result.toString();
                 final String resultString = mTokenizer.getLocalizedExpression(
-                        Util.doubleToString(result, MAX_DIGITS, ROUNDING_DIGITS));
+                        //Util.DoubleToString(result, MAX_DIGITS, ROUNDING_DIGITS));
+                        BigString);
                 callback.onEvaluate(expr, resultString, Calculator.INVALID_RES_ID);
             }
         } catch (SyntaxException e) {
