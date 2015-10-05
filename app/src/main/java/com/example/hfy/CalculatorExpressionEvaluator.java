@@ -70,9 +70,12 @@ public class CalculatorExpressionEvaluator {
                 String BigString;
                 if(DouResult.isInfinite()){
                     BigString ="Infinity";
-                }else{
+                }else if(expr.matches("[.\\d()\\+\\-\\*\\/]*")){
                     Expression mExpress = new Expression(expr);
                     BigString = mExpress.calcuCurrentExpression();
+                }else {
+                    BigDecimal result = new BigDecimal(mSymbols.eval(expr));
+                    BigString = result.toString();
                 }
                 Log.e("exprout","BigDecimal结果为"+BigString);
                 final String resultString = mTokenizer.getLocalizedExpression(

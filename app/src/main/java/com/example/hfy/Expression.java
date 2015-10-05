@@ -5,7 +5,8 @@ import java.math.BigDecimal;
 
 public class Expression {
 	String mExpression;  //要计算的表达式
-	private int mScale = 200;	//除法运算的默认保留位数，只针对除不尽的数
+	private int mScale = 100;	//除法运算的默认保留位数，只针对除不尽的数
+
 
 	public int getMScale() {  //mScale的get方法，供其他类读取mScale的值
 		return mScale;
@@ -24,7 +25,7 @@ public class Expression {
 		if ("".equals(mExpression))
 			return null;
 		calc_result = calcuThisExpression(mExpression).toString();
-		return calc_result;
+		return getPrettyNumber(calc_result);
 	}
 
 	private int findTheLowestPriority(String s) {	//寻找表达式中的最低优先级符号，返回该最低符号在表达式中的位置
@@ -133,4 +134,30 @@ public class Expression {
 
 		return calc_result;		//返回该函数的运算结果
 	}
+
+
+		/*private String fushu(String s){	//负数
+		while ((s.charAt(0) == '(') && ((s.charAt(s.length() - 1) == ')'))&& flag)
+		for(int i=0;i<s.length()-1;i++){
+			if((s.charAt(i) == '*'||s.charAt(i) == '/') &&(s.charAt(i) == '('))
+		}
+	}*/
+
+
+/*	private String buchongkuohao(String s){//补充括号
+		int a=0,b=0;
+		for (int i = 0; i < s.length(); i++) {
+			if(s.charAt(i) == '(')a++;
+			else if(s.charAt(i) == ')')b++;
+		}
+		if(a>b)for(int i=0;i<a-b;i++)s=s+')';
+		else if(a<b)for(int i=0;i<a-b;i++)s='('+s;
+		return s;
+	}*/
+
+	public static String getPrettyNumber(String s) {//去除多余的0
+		BigDecimal result = new BigDecimal(s);
+		return result.stripTrailingZeros().toPlainString();
+	}
 }
+
