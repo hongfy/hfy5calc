@@ -1,6 +1,8 @@
 
 package com.example.hfy;
 
+import android.util.Log;
+
 import java.math.BigDecimal;
 
 public class Expression {
@@ -24,6 +26,30 @@ public class Expression {
 		String calc_result;
 		if ("".equals(mExpression))
 			return null;
+
+		int a=0,b=0;		//检测括号匹配问题
+		for (int i = 0; i < mExpression.length(); i++) {
+			if(mExpression.charAt(i) == '(')a++;
+			else if(mExpression.charAt(i) == ')')b++;
+		}
+		if(a!=b)return "(⊙﹏⊙)括号未匹配";
+		Log.e("exprout","计算过程中未处理的mExpression为"+mExpression);
+		for (int i = 0; i < mExpression.length()-1; i++) {
+			if(mExpression.charAt(i) == '('){
+				if(Character.isDigit(mExpression.charAt(i - 1))){
+					mExpression=mExpression.substring(0,i)+'*'+mExpression.substring(i,mExpression.length());//插入乘号
+				}
+				if(i==1&&mExpression.charAt(i - 1)=='-')
+					mExpression=mExpression.substring(0,i)+"1*"+mExpression.substring(i,mExpression.length());//插入乘号
+				else if(i>1&&mExpression.charAt(i - 1)=='-'&&(mExpression.charAt(i - 2)=='*'||mExpression.charAt(i - 1)=='/'))
+					mExpression=mExpression.substring(0,i)+"1*"+mExpression.substring(i,mExpression.length());//插入乘号
+			}
+			else if(mExpression.charAt(i) == ')'&&Character.isDigit(mExpression.charAt(i+1))){
+				mExpression=mExpression.substring(0,i+1)+'*'+mExpression.substring(i+1,mExpression.length());//插入乘号
+			}
+		}
+		Log.e("exprout","计算过程中mExpression为"+mExpression);
+
 		calc_result = calcuThisExpression(mExpression).toString();
 		return getPrettyNumber(calc_result);
 	}
@@ -34,7 +60,7 @@ public class Expression {
 			switch (s.charAt(i)) {
 				case '+':
 				case '-':
-					if ((i == 0) || (s.charAt(i - 1) == '('))
+					if ((i == 0) || s.charAt(i - 1) == '('|| s.charAt(i - 1) == '*'|| s.charAt(i - 1) == '/')
 						break;
 
 					if ((k + 1) <= min_priority) {
