@@ -34,7 +34,7 @@ public class Expression {
 		}
 		if(a!=b)return "(⊙﹏⊙)括号未匹配";
 		Log.e("exprout","计算过程中未处理的mExpression为"+mExpression);
-		for (int i = 0; i < mExpression.length()-1; i++) {
+		for (int i = 1; i < mExpression.length()-1; i++) {
 			if(mExpression.charAt(i) == '('){
 				if(Character.isDigit(mExpression.charAt(i - 1))){
 					mExpression=mExpression.substring(0,i)+'*'+mExpression.substring(i,mExpression.length());//插入乘号
