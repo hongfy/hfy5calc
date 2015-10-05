@@ -47,15 +47,17 @@ public class CalculatorExpressionEvaluator {
         }
 
         try {
-            Double DouResult = mSymbols.eval(expr);
             Log.e("exprout", expr);
+            Double DouResult = mSymbols.eval(expr);
             Log.e("exprout", "double结果为" + DouResult.toString());
             //BigDecimal result = new BigDecimal(mSymbols.eval(expr));
             //BigDecimal result = mExpress.calcuThisExpression(expr);
             //Object objResult = i.eval(expr);
             //TODO 警告！！！expr在这里还是计算式的String，还没有转换为单个数值
-            if (Double.isNaN(DouResult)) {
+            // Double.isInfinite(x)判断无穷大
+            if (DouResult.isNaN(DouResult)) {
                 callback.onEvaluate(expr, null, R.string.error_nan);
+                Log.e("exprout","DouResult isNaN");
             } else {
                 // The arity library uses floating point arithmetic when evaluating the expression
                 // leading to precision errors in the result. The method doubleToString hides these
@@ -65,8 +67,13 @@ public class CalculatorExpressionEvaluator {
                 //误差；通过对精度下降的数字计算。
 
                 //String BigString = result.toString();
-                Expression mExpress = new Expression(expr);
-                String BigString = mExpress.calcuCurrentExpression();
+                String BigString;
+                if(DouResult.isInfinite()){
+                    BigString ="Infinity";
+                }else{
+                    Expression mExpress = new Expression(expr);
+                    BigString = mExpress.calcuCurrentExpression();
+                }
                 Log.e("exprout","BigDecimal结果为"+BigString);
                 final String resultString = mTokenizer.getLocalizedExpression(
                         //Util.DoubleToString(result, MAX_DIGITS, ROUNDING_DIGITS));
