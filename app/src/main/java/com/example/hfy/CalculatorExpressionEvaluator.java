@@ -2,6 +2,8 @@
 
 package com.example.hfy;
 
+import android.util.Log;
+
 import org.javia.arity.Symbols;
 import org.javia.arity.SyntaxException;
 import org.javia.arity.Util;
@@ -15,6 +17,8 @@ public class CalculatorExpressionEvaluator {
 
     private final Symbols mSymbols;
     private final CalculatorExpressionTokenizer mTokenizer;
+    //private final Expression mExpress=null;
+    //Interpreter i = new Interpreter();
 
     public CalculatorExpressionEvaluator(CalculatorExpressionTokenizer tokenizer) {
         mSymbols = new Symbols();
@@ -44,7 +48,12 @@ public class CalculatorExpressionEvaluator {
 
         try {
             Double DouResult = mSymbols.eval(expr);
-            BigDecimal result = new BigDecimal(mSymbols.eval(expr));
+            Log.e("exprout", expr);
+            Log.e("exprout", "double结果为" + DouResult.toString());
+            //BigDecimal result = new BigDecimal(mSymbols.eval(expr));
+            //BigDecimal result = mExpress.calcuThisExpression(expr);
+            //Object objResult = i.eval(expr);
+            //TODO 警告！！！expr在这里还是计算式的String，还没有转换为单个数值
             if (Double.isNaN(DouResult)) {
                 callback.onEvaluate(expr, null, R.string.error_nan);
             } else {
@@ -54,7 +63,11 @@ public class CalculatorExpressionEvaluator {
                 //数库使用浮点运算时，计算表达式
                 //导致精度误差的结果。方法double to string隐藏这些
                 //误差；通过对精度下降的数字计算。
-                String BigString = result.toString();
+
+                //String BigString = result.toString();
+                Expression mExpress = new Expression(expr);
+                String BigString = mExpress.calcuCurrentExpression();
+                Log.e("exprout","BigDecimal结果为"+BigString);
                 final String resultString = mTokenizer.getLocalizedExpression(
                         //Util.DoubleToString(result, MAX_DIGITS, ROUNDING_DIGITS));
                         BigString);
