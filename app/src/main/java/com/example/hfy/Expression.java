@@ -27,11 +27,13 @@ public class Expression {
 		if ("".equals(mExpression))
 			return null;
 
-		int a=0,b=0;		//检测括号匹配问题
+		int a=0,b=0,flag=0;		//检测括号匹配问题
 		for (int i = 0; i < mExpression.length(); i++) {
 			if(mExpression.charAt(i) == '(')a++;
 			else if(mExpression.charAt(i) == ')')b++;
+			if(a<b)flag=1;
 		}
+		if(flag==1)return "(╯‵□′)╯︵┻━┻\n括号写错了！";
 		if(a!=b)return "(⊙﹏⊙)括号未匹配";
 		Log.e("exprout","计算过程中未处理的mExpression为"+mExpression);
 		for (int i = 1; i < mExpression.length()-1; i++) {
