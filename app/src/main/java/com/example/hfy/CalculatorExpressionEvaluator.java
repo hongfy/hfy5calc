@@ -17,6 +17,7 @@ public class CalculatorExpressionEvaluator {
 
     private final Symbols mSymbols;
     private final CalculatorExpressionTokenizer mTokenizer;
+    public static String resultString="";
     //private final Expression mExpress=null;
     //Interpreter i = new Interpreter();
 
@@ -78,7 +79,7 @@ public class CalculatorExpressionEvaluator {
                     BigString = result.toString();
                 }
                 Log.e("exprout","BigDecimal结果为"+BigString);
-                final String resultString = mTokenizer.getLocalizedExpression(
+                resultString = mTokenizer.getLocalizedExpression(
                         //Util.DoubleToString(result, MAX_DIGITS, ROUNDING_DIGITS));
                         BigString);
                 callback.onEvaluate(expr, resultString, Calculator.INVALID_RES_ID);

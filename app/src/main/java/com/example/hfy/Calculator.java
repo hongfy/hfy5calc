@@ -138,6 +138,10 @@ public class Calculator extends Activity
         mFormulaEditText.setOnKeyListener(mFormulaOnKeyListener);
         mFormulaEditText.setOnTextSizeChangeListener(this);
         mDeleteButton.setOnLongClickListener(this);
+
+        //语音功能
+
+        SoundManager.getInstance().initSounds(this);
     }
 
     @Override
@@ -209,9 +213,21 @@ public class Calculator extends Activity
     public void onButtonClick(View view) {
         mCurrentButton = view;
 
+        String str = ((Button)view).getText().toString();       //获取文本信息
+        SoundManager.getInstance().playSound(str);
+
         switch (view.getId()) {
             case R.id.eq:
                 onEquals();
+                String resultSound = CalculatorExpressionEvaluator.resultString;
+                if(resultSound!=""){
+                    String[] soundsToPlay = new String[resultSound.length()];
+                    for(int i = 0 ;i <soundsToPlay.length; i++){
+                        soundsToPlay[i] = String.valueOf(resultSound.charAt(i));
+                    }
+                    SoundManager.getInstance().playSeqSounds(soundsToPlay);
+                    CalculatorExpressionEvaluator.resultString="";
+                }
                 break;
             case R.id.del:
                 onDelete();
