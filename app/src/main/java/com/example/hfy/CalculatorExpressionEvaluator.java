@@ -72,8 +72,14 @@ public class CalculatorExpressionEvaluator {
                 if(DouResult.isInfinite()){
                     BigString ="Infinity";
                 }else if(expr.matches("[.\\d()\\+\\-\\*\\/]*")){
-                    Expression mExpress = new Expression(expr);
-                    BigString = mExpress.calcuCurrentExpression();
+                    try{
+                        Expression mExpress = new Expression(expr);
+                        BigString = mExpress.calcuCurrentExpression();
+                    }catch (Exception e) {
+                        callback.onEvaluate(expr, null, R.string.error_syntax);
+                        BigDecimal result = new BigDecimal(mSymbols.eval(expr));
+                        BigString = result.toString();
+                    }
                 }else {
                     BigDecimal result = new BigDecimal(mSymbols.eval(expr));
                     BigString = result.toString();

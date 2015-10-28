@@ -27,6 +27,13 @@ public class Expression {
 		if ("".equals(mExpression))
 			return null;
 
+
+/*		if(mExpression.charAt(0)=='.')
+			mExpression="0"+mExpression;//“.12”情况
+		if(mExpression.charAt(0)=='-'&&mExpression.charAt(1)=='.')
+			mExpression="-0"+mExpression.substring(1,mExpression.length());//“-.12”情况*/
+
+
 		int a=0,b=0,flag=0;		//检测括号匹配问题
 		for (int i = 0; i < mExpression.length(); i++) {
 			if(mExpression.charAt(i) == '(')a++;
